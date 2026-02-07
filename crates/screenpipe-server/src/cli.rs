@@ -55,7 +55,7 @@ impl From<CliAudioTranscriptionEngine> for CoreAudioTranscriptionEngine {
 #[derive(Clone, Debug, ValueEnum, PartialEq)]
 pub enum CliOcrEngine {
     Unstructured,
-    #[cfg(target_os = "linux")]
+    #[cfg(any(target_os = "linux", target_os = "windows"))]
     Tesseract,
     #[cfg(target_os = "windows")]
     WindowsNative,
@@ -70,7 +70,7 @@ impl From<CliOcrEngine> for Arc<DBOcrEngine> {
             CliOcrEngine::Unstructured => Arc::new(DBOcrEngine::Unstructured),
             #[cfg(target_os = "macos")]
             CliOcrEngine::AppleNative => Arc::new(DBOcrEngine::AppleNative),
-            #[cfg(target_os = "linux")]
+            #[cfg(any(target_os = "linux", target_os = "windows"))]
             CliOcrEngine::Tesseract => Arc::new(DBOcrEngine::Tesseract),
             #[cfg(target_os = "windows")]
             CliOcrEngine::WindowsNative => Arc::new(DBOcrEngine::WindowsNative),
@@ -83,7 +83,7 @@ impl From<CliOcrEngine> for CoreOcrEngine {
     fn from(cli_engine: CliOcrEngine) -> Self {
         match cli_engine {
             CliOcrEngine::Unstructured => CoreOcrEngine::Unstructured,
-            #[cfg(target_os = "linux")]
+            #[cfg(any(target_os = "linux", target_os = "windows"))]
             CliOcrEngine::Tesseract => CoreOcrEngine::Tesseract,
             #[cfg(target_os = "windows")]
             CliOcrEngine::WindowsNative => CoreOcrEngine::WindowsNative,
@@ -216,7 +216,7 @@ pub struct Cli {
         arg(short = 'o', long, value_enum, default_value_t = CliOcrEngine::WindowsNative)
     )]
     #[cfg_attr(
-        not(any(target_os = "macos", target_os = "windows")),
+        not(any(target_os = "macos")),
         arg(short = 'o', long, value_enum, default_value_t = CliOcrEngine::Tesseract)
     )]
     pub ocr_engine: CliOcrEngine,
@@ -441,7 +441,7 @@ pub struct RecordArgs {
         arg(short = 'o', long, value_enum, default_value_t = CliOcrEngine::WindowsNative)
     )]
     #[cfg_attr(
-        not(any(target_os = "macos", target_os = "windows")),
+        not(any(target_os = "macos")),
         arg(short = 'o', long, value_enum, default_value_t = CliOcrEngine::Tesseract)
     )]
     pub ocr_engine: CliOcrEngine,
