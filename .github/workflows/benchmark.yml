@@ -1,8 +1,6 @@
 name: Rust Benchmark
 
 on:
-  schedule:
-    - cron: '0 8 * * *'  # Daily at midnight PST (8 AM UTC)
   workflow_dispatch:
 
 concurrency:
