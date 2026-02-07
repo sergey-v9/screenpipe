@@ -117,15 +117,6 @@ jobs:
         run: |
           cargo build --release --target x86_64-pc-windows-msvc
 
-      - name: Upload debug symbols to Sentry
-        shell: powershell
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: mediar
-        run: |
-          Invoke-WebRequest -Uri "https://release-registry.services.sentry.io/apps/sentry-cli/latest?response=download&arch=x86_64&platform=Windows&package=sentry-cli" -OutFile sentry-cli.exe
-          .\sentry-cli.exe debug-files upload --org $env:SENTRY_ORG --project screenpipe-cli target/x86_64-pc-windows-msvc/release/
-
       - name: Set version
         shell: pwsh
         run: |
